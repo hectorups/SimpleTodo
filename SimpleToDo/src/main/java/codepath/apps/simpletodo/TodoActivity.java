@@ -1,6 +1,7 @@
 package codepath.apps.simpletodo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 
 
 public class TodoActivity extends Activity {
+    public static final int REQUEST_CODE = 20;
+
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
@@ -52,6 +55,28 @@ public class TodoActivity extends Activity {
                 return true;
             }
         });
+
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TodoActivity.this, EditItemActivity.class);
+                i.putExtra(EditItemActivity.EXTRA_ITEM_TEXT, items.get(position));
+                i.putExtra(EditItemActivity.EXTRA_ITEM_POS, position);
+                startActivityForResult(i, REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            int pos = data.getIntExtra(EditItemActivity.EXTRA_ITEM_POS, 0);
+            items.remove(pos);
+            items.add(pos, data.getStringExtra(EditItemActivity.EXTRA_NEW_TEXT));
+            itemsAdapter.notifyDataSetChanged();
+            saveItems();
+        }
     }
 
     private void readItems(){

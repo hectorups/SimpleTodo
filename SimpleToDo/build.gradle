@@ -35,5 +35,5 @@ android {
 
 dependencies {
 	compile 'com.android.support:appcompat-v7:+'
-    compile 'com.github.sworisbreathing.sfmf4j:sfmf4j-commonsio:1.0'
+	compile 'com.github.sworisbreathing.sfmf4j:sfmf4j-commonsio:1.0'
 }
